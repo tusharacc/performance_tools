@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com/charts/loader.js https://www.gstatic.com/charts/51/loader.js"> -->
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Data Visualizer</title>
+  </head>
+  <body>
+    <button id="processor">Generate Processor Chart</button>
+    <div id="chart_div"></div>
+
+    <script type="text/javascript" src="../assets/google.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
