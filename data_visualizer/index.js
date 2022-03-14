@@ -5,9 +5,10 @@ const { rejects } = require('assert')
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 
+let mainWindow;
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -21,7 +22,7 @@ const createWindow = () => {
   mainWindow.loadFile('src/index.html')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools({mode: 'bottom'})
 }
 
 // This method will be called when Electron has finished
@@ -73,3 +74,29 @@ ipcMain.handle('getFile', async (event, someArgument) => {
         })
     })
   })
+
+ipcMain.on('performance', (event) =>{
+  dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] })
+  .then((data)=>{
+      console.log("The file selected is",data)
+      const child = new BrowserWindow({parent: mainWindow,
+        webPreferences: {
+          preload: path.join(__dirname, 'preload.js'),
+          nodeIntegration: true,
+          contextIsolation: false
+        }});
+      
+        // and load the index.html of the app.
+      child.loadFile('src/performance/index.html')
+      
+  // Open the DevTools.
+      child.webContents.openDevTools({mode: 'bottom'})
+      child.once('ready-to-show', () => {
+        child.show();
+        child.webContents.send('store-data', data);
+      })
+  })
+  .catch((err)=>{
+      console.error("Error",err);
+  })
+})

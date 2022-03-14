@@ -1,11 +1,20 @@
 const { ipcRenderer } = require('electron')
 const fs = require('fs')
 
-let processorBtn = document.getElementById("processor")
+let processorBtn = document.getElementById("processor");
+let performanceBtn = document.getElementById("performance");
 
 processorBtn.addEventListener("click", ()=>{
     generateProcessorChart();
 })
+
+performanceBtn.addEventListener("click", () =>{
+    generatePerformanceChart();
+})
+
+function generatePerformanceChart(){
+    ipcRenderer.send("performance")
+}
 
 async function generateProcessorChart(){
     console.log("Generate processor")

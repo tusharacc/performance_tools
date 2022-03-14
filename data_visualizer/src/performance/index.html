@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com/charts/loader.js https://www.gstatic.com/charts/51/loader.js"> -->
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Performance Visualizer</title>
+  </head>
+  <body>
+    <label for="processId">Select Process Id:</label>
+
+    <select name="processId" id="processId">
+    <option value="none">None</option>
+    </select>
+    <div id="chart_area">
+        <div id="processor-time"></div>
+        <div id="virtual-bytes"></div>
+        <div id="working-set"></div>
+        <div id="counts"></div>
+        <div id="paged-bytes"></div>
+        <div id="operations"></div>
+        <div id="misc-operations"></div>
+        <div id="input-output"></div>
+        <div id="other-data"></div>
+    </div>
+
+    <script type="text/javascript" src="../../assets/google.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
