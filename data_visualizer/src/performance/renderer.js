@@ -7,23 +7,23 @@ google.charts.load('current', {'packages':['corechart']});
 
 ipcRenderer.on('store-data', function (event,store) {
     console.log(store);
-    generateData();
+    generateData(store['filePaths'][0]);
 });
 
 let processIdElem = document.getElementById('processId')
 let performanceObject = {}
 //let processId = [];
-function generateData(){
-    const data = fs.readFileSync('C:\\Users\\T9SAU2\\OneDrive - Chubb\\Documents\\PythonProjects\\LeetCode\\performance_tools\\data_visualizer\\performance.txt', {encoding: 'utf8', flag: 'r'})
+function generateData(filepath){
+    const data = fs.readFileSync(filepath, {encoding: 'utf8', flag: 'r'})
     let lines = data.split('\n');
     lines.forEach(element => {
-        console.log("Lines", element)
+        //console.log("Lines", element)
         let fields = element.split(',');
         let tempObj = {};
         let processid = fields[0];
         if (fields.length != 3){
             d = {
-                name: fields[1], timestamp: fields[2], processorTime: parseInt(fields[3]), userTime: parseInt(fields[4]), priveledgeTime: fields[5],
+                name: fields[1], timestamp: fields[2], processorTime: parseInt(fields[3])/1000000, userTime: parseInt(fields[4])/1000000, priveledgeTime: fields[5],
                 virtualBytesPeak: parseInt(fields[6])/1000000, virtualBytes: parseInt(fields[7])/1000000, pageFaults: fields[8],
                 workingSetPeak: parseInt(fields[9])/1000000, workingSet: parseInt(fields[10])/1000000,
                 pageFileBytesPeak: parseInt(fields[11])/1000000, pageFileBytes: parseInt(fields[12])/1000000,
@@ -79,13 +79,20 @@ processIdElem.addEventListener('change', (event) =>{
 
     //virtual bytes
     let virtualBytesData = [['Time Stamp', 'Virtual Byte Peak (MB)', 'Virtual Bytes (MB)']]
+    let doNotShow = false;
     performanceData.forEach(element => {
         //console.log("The element being read is", element)
+        if (element.virtualBytes == -1){
+            doNotShow = true
+        }
         virtualBytesData.push([element.timestamp, element.virtualBytesPeak, element.virtualBytes])
     });
-    chartElement = document.getElementById("virtual-bytes")
-    title = "Virtual Bytes"
-    drawChart(virtualBytesData,title,chartElement);
+    if (!doNotShow){
+        chartElement = document.getElementById("virtual-bytes")
+        title = "Virtual Bytes"
+        drawChart(virtualBytesData,title,chartElement);
+    }
+    
 
     //working set
     let workingBytes = [['Time Stamp','Working Set Peak (MB)', 'Working Set (MB)', 'Working Set - Private (MB)' ]]
